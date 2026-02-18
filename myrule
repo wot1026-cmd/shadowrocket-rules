@@ -1,0 +1,276 @@
+# Shadowrocket: 2026-02-18 20:15:20
+[General]
+ipv6 = false
+bypass-system = true
+
+# 参考第二份配置补全了 skip-proxy，加入 guzzoni.apple.com、injections.adguard.org 等
+
+skip-proxy = localhost, *.local, *.lan, *.internal, captive.apple.com, guzzoni.apple.com, sequoia.apple.com, seed-sequoia.siri.apple.com, injections.adguard.org, local.adguard.org, 0.0.0.0/8, 10.0.0.0/8, 17.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.168.0.0/16, 192.88.99.0/24, 198.18.0.0/15, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 240.0.0.0/4, 255.255.255.255/32
+
+# 参考第二份配置补全了 bypass-tun
+
+bypass-tun = 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.168.0.0/16, 192.88.99.0/24, 198.18.0.0/15, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 255.255.255.255/32
+
+# DNS：DoH 优先，保留纯 IP 备用防止 DoH 失败
+
+dns-server = https://doh.pub/dns-query, https://dns.alidns.com/dns-query, 223.5.5.5, 119.29.29.29
+
+# ==============================
+
+# 说明：
+
+# 本配置使用 blackmatrix7 远程规则，规则会自动更新。
+
+# 规则优先级：从上到下，先匹配先生效。
+
+# Apple 系统 App（备忘录/日历/相机等）走 Apple 直连规则即可，无需单独配置。
+
+# ==============================
+
+[Rule]
+
+# ==============================
+
+# Safari 安全浏览（直连）
+
+# 参考第二份配置：保留此条避免 SafeBrowsing 走代理导致网页打开慢
+
+# ==============================
+
+DOMAIN,safebrowsing.googleapis.com,DIRECT
+DOMAIN,safebrowsing.urlsec.qq.com,DIRECT
+
+# ==============================
+
+# Apple 全部直连（最高优先级）
+
+# 覆盖：App Store、查找、家庭、快捷指令、备忘录、
+
+# 日历、提醒事项、通讯录、照片、Safari 等所有系统 App
+
+# 参考第二份配置补充了 edgekey.net、edgesuite.net、mwcname.com
+
+# ==============================
+
+DOMAIN-SUFFIX,apple.com,DIRECT
+DOMAIN-SUFFIX,apps.apple.com,DIRECT
+DOMAIN-SUFFIX,itunes.apple.com,DIRECT
+DOMAIN-SUFFIX,mzstatic.com,DIRECT
+DOMAIN-SUFFIX,appstore.com,DIRECT
+DOMAIN-SUFFIX,blobstore.apple.com,DIRECT
+DOMAIN-SUFFIX,aaplimg.com,DIRECT
+DOMAIN-SUFFIX,cdn-apple.com,DIRECT
+DOMAIN-SUFFIX,akadns.net,DIRECT
+DOMAIN-SUFFIX,akamaiedge.net,DIRECT
+DOMAIN-SUFFIX,edgekey.net,DIRECT
+DOMAIN-SUFFIX,edgesuite.net,DIRECT
+DOMAIN-SUFFIX,icloud.com,DIRECT
+DOMAIN-SUFFIX,icloud-content.com,DIRECT
+DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT
+DOMAIN-SUFFIX,apple-mapkit.com,DIRECT
+DOMAIN-SUFFIX,apple-dns.net,DIRECT
+DOMAIN-SUFFIX,me.com,DIRECT
+DOMAIN-SUFFIX,mwcloudcdn.com,DIRECT
+DOMAIN-SUFFIX,mwcname.com,DIRECT
+
+# App Store 下载 User-Agent 强制直连（参考第二份配置）
+
+USER-AGENT,com.apple.appstored*,DIRECT
+USER-AGENT,AppStore*,DIRECT
+USER-AGENT,cloudd*,DIRECT
+
+# ==============================
+
+# 微信 / WeChat 直连（参考第二份配置）
+
+# 防止微信被误判走代理
+
+# ==============================
+
+USER-AGENT,MicroMessenger Client,DIRECT
+USER-AGENT,WeChat*,DIRECT
+
+# ==============================
+
+# 国内金融 & 银行（直连）
+
+# 覆盖：招商银行、中国工商银行、中国银行、建行、农行、邮储
+
+# ==============================
+
+DOMAIN-SUFFIX,cmbchina.com,DIRECT
+DOMAIN-SUFFIX,cmbimg.com,DIRECT
+DOMAIN-SUFFIX,icbc.com.cn,DIRECT
+DOMAIN-SUFFIX,icbc-ltd.com,DIRECT
+DOMAIN-SUFFIX,boc.cn,DIRECT
+DOMAIN-SUFFIX,bankofchina.com,DIRECT
+DOMAIN-SUFFIX,ccb.com,DIRECT
+DOMAIN-SUFFIX,abchina.com,DIRECT
+DOMAIN-SUFFIX,psbc.com,DIRECT
+DOMAIN-SUFFIX,95599.cn,DIRECT
+DOMAIN-SUFFIX,alipay.com,DIRECT
+DOMAIN-SUFFIX,alipayobjects.com,DIRECT
+
+# ==============================
+
+# 国内运营商（直连）
+
+# 覆盖：中国电信
+
+# ==============================
+
+DOMAIN-SUFFIX,chinatelecom.com.cn,DIRECT
+DOMAIN-SUFFIX,chinatelecom.cn,DIRECT
+DOMAIN-SUFFIX,189.cn,DIRECT
+DOMAIN-SUFFIX,ctyun.cn,DIRECT
+
+# ==============================
+
+# 萤石云（直连，海康威视国内服务）
+
+# ==============================
+
+DOMAIN-SUFFIX,ys7.com,DIRECT
+DOMAIN-SUFFIX,ezviz.com,DIRECT
+DOMAIN-SUFFIX,ezvizlife.com,DIRECT
+
+# ==============================
+
+# 境外服务（走代理）
+
+# ==============================
+
+# ChatGPT / OpenAI
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/OpenAI/OpenAI.list,PROXY
+
+# Claude / Anthropic
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Anthropic/Anthropic.list,PROXY
+
+# Gemini / Google（含 Gmail、Google 相册、Google 翻译）
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Google/Google.list,PROXY
+
+# Grok / xAI（仓库无此列表，手动写入）
+
+DOMAIN-SUFFIX,x.ai,PROXY
+DOMAIN-SUFFIX,grok.com,PROXY
+
+# Perplexity（仓库无此列表，手动写入）
+
+DOMAIN-SUFFIX,perplexity.ai,PROXY
+DOMAIN-SUFFIX,perplexity.com,PROXY
+
+# DeepSeek（仓库无此列表，手动写入）
+
+DOMAIN-SUFFIX,deepseek.com,PROXY
+DOMAIN-SUFFIX,deepseek.ai,PROXY
+
+# Copilot / Bing
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Bing/Bing.list,PROXY
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Copilot/Copilot.list,PROXY
+
+# YouTube
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/YouTube/YouTube.list,PROXY
+
+# Netflix
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Netflix/Netflix.list,PROXY
+
+# Telegram
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Telegram/Telegram.list,PROXY
+
+# X / Twitter
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Twitter/Twitter.list,PROXY
+
+# TikTok（与国内抖音不同，需走代理）
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/TikTok/TikTok.list,PROXY
+
+# GitHub
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/GitHub/GitHub.list,PROXY
+
+# Microsoft OneDrive & Outlook（Microsoft 规则集覆盖更全）
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/OneDrive/OneDrive.list,PROXY
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Microsoft/Microsoft.list,PROXY
+
+# Brave 浏览器同步服务
+
+DOMAIN-SUFFIX,brave.com,PROXY
+DOMAIN-SUFFIX,bravesoftware.com,PROXY
+DOMAIN-SUFFIX,brave.io,PROXY
+
+# Spotify
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Spotify/Spotify.list,PROXY
+
+# Wikipedia
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Wikipedia/Wikipedia.list,PROXY
+
+# PrivadoVPN 直连（VPN 客户端本身不需要走代理）
+
+DOMAIN-SUFFIX,privado.io,DIRECT
+DOMAIN-SUFFIX,privadovpn.com,DIRECT
+
+# ==============================
+
+# 国内直连（blackmatrix7 China 规则）
+
+# 覆盖：微信、QQ、淘宝、京东、拼多多、抖音、哔哩哔哩、
+
+# 支付宝、高德、百度贴吧、小红书、闲鱼、快手、
+
+# 今日头条、什么值得买、豆包、阿里巴巴、菜鸟、
+
+# 网易将军令、墨迹天气、微信输入法 等
+
+# ==============================
+
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/China/China.list,DIRECT
+
+# ==============================
+
+# 局域网直连
+
+# 参考第二份配置补充了 17.0.0.0/8（苹果自有 IP 段）
+
+# ==============================
+
+DOMAIN-SUFFIX,local,DIRECT
+IP-CIDR,127.0.0.0/8,DIRECT
+IP-CIDR,10.0.0.0/8,DIRECT
+IP-CIDR,17.0.0.0/8,DIRECT
+IP-CIDR,172.16.0.0/12,DIRECT
+IP-CIDR,192.168.0.0/16,DIRECT
+IP-CIDR,100.64.0.0/10,DIRECT
+IP-CIDR,224.0.0.0/4,DIRECT
+IP-CIDR6,FE80::/10,DIRECT
+
+# ==============================
+
+# GEOIP 兜底（补充 China 规则未覆盖的国内 IP）
+
+# ==============================
+
+GEOIP,CN,DIRECT
+
+# 其余全部走代理
+
+FINAL,PROXY
+
+[URL Rewrite]
+
+# Google CN 重定向
+
+^https?://(www.)?(g|google).cn https://www.google.com 302
+
+[MITM]
+hostname = *.google.cn
